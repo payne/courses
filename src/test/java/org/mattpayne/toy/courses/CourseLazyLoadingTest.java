@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,6 +72,9 @@ class CourseLazyLoadingTest {
     void shouldDemonstrateLazyLoading() {
         // First, get the course without loading students
         Course course = courseRepository.findById(1L).orElseThrow();
+        // YIKES!!
+        // This ^^^ fails when running all the tests in a session.
+        // running just this tests works.
 
         // Verify course is loaded but students are not
         assertTrue(Hibernate.isInitialized(course));
@@ -125,7 +129,13 @@ class CourseLazyLoadingTest {
     @Transactional(readOnly = true)
     void shouldHandleLazyLoadingInService() {
         // Get course with students eagerly loaded
-        Course course = courseRepository.findByIdWithStudents(1L).orElseThrow();
+        // IDK why it fails when I try and inline this.
+        // Course course = courseRepository.findByIdWithStudents(1L).orElseThrow();
+        // but one step at a time works ok.
+        // nope, that's not it.  This fails when running all the tests in a session.
+        // running just this tests works.
+        Optional<Course> opt = courseRepository.findByIdWithStudents(1L);
+        Course course = opt.orElseThrow();
 
         // Access students within transaction
         Set<Student> students = course.getStudents();
