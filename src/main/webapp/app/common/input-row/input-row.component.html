@@ -1,0 +1,61 @@
+<div [formGroup]="group!" class="md:grid grid-cols-12 gap-4 mb-4">
+    @if (rowType === 'checkbox') {
+    <div class="col-span-10 col-start-3">
+        <div>
+            <input [id]="field" [formControlName]="field" type="checkbox"
+                    class="rounded border-gray-300 {{ getInputClasses() }}" />
+            <label [for]="field" class="ml-2">
+                {{ label + (isRequired() ? '*' : '') }}
+            </label>
+        </div>
+        <app-input-errors [control]="control" />
+    </div>
+    } @else {
+    <label [for]="rowType === 'radio' ? '' : field" class="col-span-2 py-2">
+        {{ label + (isRequired() ? '*' : '') }}
+    </label>
+    <div class="col-span-10">
+        @if (rowType === 'text' || rowType === 'password' || rowType === 'email' || rowType === 'tel') {
+        <input [id]="field" [type]="rowType" [formControlName]="field"
+                class="w-full xl:w-3/4 border-gray-300 rounded {{ getInputClasses() }}" />
+        } @else if (rowType === 'number') {
+        <input [id]="field" type="number" [formControlName]="field"
+                class="w-full xl:w-3/4 border-gray-300 rounded {{ getInputClasses() }}" />
+        } @else if (rowType === 'textarea') {
+        <textarea [id]="field" [formControlName]="field"
+                class="w-full xl:w-3/4 border-gray-300 rounded {{ getInputClasses() }}"></textarea>
+        } @else if (rowType === 'select') {
+        <select [id]="field" [formControlName]="field"
+                class="w-full xl:w-3/4 border-gray-300 rounded {{ getInputClasses() }}">
+            <option [ngValue]="null" i18n="@@select.empty.label">Please select</option>
+            @for (option of optionsMap | keyvalue; track option.key) {
+            <option [ngValue]="option.key">{{ option.value }}</option>
+            }
+        </select>
+        } @else if (rowType === 'multiselect') {
+        <select [id]="field" [formControlName]="field" multiple="true"
+                class="w-full xl:w-3/4 border-gray-300 rounded {{ getInputClasses() }}">
+            @for (option of optionsMap | keyvalue; track option.key) {
+            <option [ngValue]="option.key">{{ option.value }}</option>
+            }
+        </select>
+        } @else if (rowType === 'radio') {
+            @if (!isRequired()) {
+            <div class="inline-block mr-4 last:mr-0 pt-2">
+                <input [id]="field" [formControlName]="field" [value]="null" type="radio"
+                       class="border-gray-300 {{ inputClass }}" />
+                <label [for]="field" class="ml-2" i18n="@@select.empty.label">Please select</label>
+            </div>
+            }
+            @for (option of optionsMap | keyvalue; track option.key) {
+            <div class="inline-block mr-4 last:mr-0 pt-2">
+                <input [id]="field + '_' + option.key" [formControlName]="field" [value]="option.key" type="radio"
+                        class="border-gray-300 {{ getInputClasses() }}" />
+                <label [for]="field + '_' + option.key" class="ml-2">{{ option.value }}</label>
+            </div>
+            }
+        }
+        <app-input-errors [control]="control" />
+    </div>
+    }
+</div>

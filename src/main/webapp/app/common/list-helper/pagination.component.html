@@ -1,0 +1,14 @@
+<div class="grid grid-cols-12 mt-10">
+    @if (steps.length > 3) {
+    <nav class="col-span-8">
+        <ul class="flex">
+            @for (step of steps; track step.label) {
+            <li class="group {{ step.active ? '' : '' }} {{ step.disabled ? '' : '' }}">
+                <a [routerLink]="pathname" [queryParams]="step.params" class="border-y border-l group-first:rounded-l group-last:rounded-r group-last:border-r border-gray-300 py-2 px-3.5 {{ step.active ? 'bg-blue-600 text-white border-blue-600' : '' }} {{ step.disabled ? 'pointer-events-none text-gray-400' : 'hover:bg-gray-100' }}">{{ step.label }}</a>
+            </li>
+            }
+        </ul>
+    </nav>
+    }
+    <div class="col-span-4 sm:text-right mt-4 sm:mt-0 {{ steps.length <= 3 ? 'col-start-9' : '' }}">Item {{ range }} of {{ page!.totalElements }}</div>
+</div>

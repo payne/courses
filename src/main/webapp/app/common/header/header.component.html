@@ -1,0 +1,36 @@
+<header class="bg-gray-50">
+    <div class="container px-4 md:px-6">
+        <nav class="flex flex-wrap items-center justify-between py-2">
+            <a routerLink="/" class="flex py-1.5 mr-4">
+                <img ngSrc="logo.png" i18n-alt="@@app.title" alt="Courses" width="30" height="30" class="inline-block">
+                <span class="text-xl pl-3" i18n="@@app.title">Courses</span>
+            </a>
+            <button type="button" class="js-dropdown md:hidden border rounded" data-dropdown-keepopen="true"
+                    i18n-aria-label="@@navigation.toggle" aria-label="Toggle navigation" aria-controls="navbarToggle" aria-expanded="false">
+                <div class="space-y-1.5 my-2.5 mx-4">
+                    <div class="w-6 h-0.5 bg-gray-500"></div>
+                    <div class="w-6 h-0.5 bg-gray-500"></div>
+                    <div class="w-6 h-0.5 bg-gray-500"></div>
+                </div>
+            </button>
+            <div class="hidden md:block flex grow md:grow-0 justify-end basis-full md:basis-auto pt-3 md:pt-1 pb-1" id="navbarToggle">
+                <ul class="flex">
+                    <li>
+                        <a routerLink="/" class="block text-gray-500 p-2" i18n="@@navigation.home">Home</a>
+                    </li>
+                    <li class="relative">
+                        <a class="js-dropdown block text-gray-500 p-2" href="#" id="navbarEntitiesLink" role="button"
+                                aria-expanded="false">
+                            <span i18n="@@navigation.entities">Entities</span>
+                            <span class="text-[9px] align-[3px] pl-0.5">&#9660;</span>
+                        </a>
+                        <ul class="hidden block absolute right-0 bg-white border border-gray-300 rounded min-w-[10rem] py-2" aria-labelledby="navbarEntitiesLink">
+                            <li><a routerLink="/students" class="inline-block w-full hover:bg-gray-200 px-4 py-1" i18n="@@student.list.headline">Students</a></li>
+                            <li><a routerLink="/courses" class="inline-block w-full hover:bg-gray-200 px-4 py-1" i18n="@@course.list.headline">Courses</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>

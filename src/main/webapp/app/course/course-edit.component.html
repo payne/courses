@@ -1,0 +1,13 @@
+<div class="flex flex-wrap mb-6">
+    <h1 class="grow text-3xl md:text-4xl font-medium mb-2" i18n="@@course.edit.headline">Edit Course</h1>
+    <div>
+        <a routerLink="/courses" class="inline-block text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded px-5 py-2" i18n="@@course.edit.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@course.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="name" i18n-label="@@course.name.label" label="Name" />
+    <app-input-row [group]="editForm" field="code" i18n-label="@@course.code.label" label="Code" />
+    <app-input-row [group]="editForm" field="credits" rowType="number" i18n-label="@@course.credits.label" label="Credits" />
+    <input type="submit" i18n-value="@@course.edit.headline" value="Edit Course" class="inline-block text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300  focus:ring-4 rounded px-5 py-2 mt-6" />
+</form>

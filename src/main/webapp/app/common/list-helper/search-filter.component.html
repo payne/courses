@@ -1,0 +1,6 @@
+<form [formGroup]="filterForm" (ngSubmit)="handleSubmit()">
+    <div class="mb-3 w-full flex flex-wrap items-stretch">
+        <input formControlName="filter" type="text" name="filter" [placeholder]="placeholder" class="border-gray-300 rounded-l flex-[1_1_auto]" />
+        <button type="submit" class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-gray-200 focus:ring-4 rounded-r px-5 py-2" i18n="@@searchFilter.apply">Apply</button>
+    </div>
+</form>

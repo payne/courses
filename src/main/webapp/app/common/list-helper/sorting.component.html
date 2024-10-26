@@ -1,0 +1,5 @@
+<select [formControl]="dropdown" (change)="handleChange()" class="border-gray-300 rounded w-full">
+    @for (sortOption of sortOptions | keyvalue; track sortOption.key) {
+    <option [ngValue]="sortOption.key">{{ sortOption.value }}</option>
+    }
+</select>

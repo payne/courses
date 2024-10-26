@@ -1,0 +1,13 @@
+<h1 class="grow text-3xl md:text-4xl font-medium mb-8" i18n="@@home.index.headline">Welcome to your new app!</h1>
+<p class="mb-4" i18n="@@home.index.text">Your app was created with <a href="https://bootify.io" target="_blank" class="underline">Bootify.io</a> and can now be customized. If you are happy with the result, <strong>please recommend us to other developers</strong> - so Bootify.io can grow further.</p>
+<p class="mb-12">
+    <span i18n="@@home.index.swagger">Swagger is</span>
+    <a [href]="environment.apiPath + '/swagger-ui.html'" target="_blank" class="underline" i18n="@@home.index.swagger.link">available here</a>.
+</p>
+<div class="md:w-2/5 mb-12">
+    <h4 class="text-2xl font-medium mb-4" i18n="@@home.index.exploreEntities">Explore your entities</h4>
+    <div class="flex flex-col border border-gray-300 rounded">
+        <a routerLink="/students" class="w-full border-gray-300 hover:bg-gray-100 border-b rounded-t px-4 py-2" i18n="@@student.list.headline">Students</a>
+        <a routerLink="/courses" class="w-full border-gray-300 hover:bg-gray-100 rounded-b px-4 py-2" i18n="@@course.list.headline">Courses</a>
+    </div>
+</div>
