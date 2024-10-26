@@ -3,9 +3,10 @@ package org.mattpayne.toy.courses.student;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
 import org.mattpayne.toy.courses.course.Course;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,6 +18,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Student {
 
     @Id
@@ -45,6 +49,7 @@ public class Student {
             joinColumns = @JoinColumn(name = "studentId"),
             inverseJoinColumns = @JoinColumn(name = "courseId")
     )
+    @ToString.Exclude
     private Set<Course> courses;
 
     @CreatedDate
@@ -54,5 +59,22 @@ public class Student {
     @LastModifiedDate
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
+
+
+    public void enrollInCourse(Course course) {
+        if (courses == null) {
+            courses = new HashSet<>();
+        }
+        courses.add(course);
+        course.addStudent(this);
+    }
+
+    public void withdrawFromCourse(Course course) {
+        if (courses == null) {
+            return;
+        }
+        courses.remove(course);
+        course.getStudents().remove(this);
+    }
 
 }
