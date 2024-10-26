@@ -1,0 +1,45 @@
+spring:
+    datasource:
+        url: ${JDBC_DATABASE_URL:jdbc:h2:mem:courses}
+        username: ${JDBC_DATABASE_USERNAME:sa}
+        password: ${JDBC_DATABASE_PASSWORD:}
+        hikari:
+            connection-timeout: 30000
+            maximum-pool-size: 10
+
+    jpa:
+        hibernate:
+            ddl-auto: create-drop  # Keeping the value from previous yml for dev profile
+        show-sql: true
+        open-in-view: false
+        properties:
+            hibernate:
+                format_sql: true
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+                id:
+                    new_generator_mappings: true
+
+    profiles:
+        active: dev
+
+logging:
+    level:
+        com.yourpackage: DEBUG
+        org.hibernate.SQL: DEBUG
+        org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+error:
+    handling:
+        http-status-in-json-response: true
+        exception-logging: NO_LOGGING
+        full-stacktrace-http-statuses: 5xx
+        log-levels:
+            5xx: ERROR
+        codes:
+            CourseCodeUnique: COURSE_CODE_UNIQUE
+
+springdoc:
+    pathsToMatch: /api/**
+
