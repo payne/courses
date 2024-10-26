@@ -1,8 +1,11 @@
 package org.mattpayne.toy.courses;
 
 
-import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityManager;
 import org.hibernate.Hibernate;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,13 +16,10 @@ import org.mattpayne.toy.courses.course.CourseRepository;
 import org.mattpayne.toy.courses.student.Student;
 import org.mattpayne.toy.courses.student.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @Slf4j
 @ActiveProfiles("test")
-class CourseLazyLoadingTest {
+public class CourseLazyLoadingTest {
 
     @Autowired
     private CourseRepository courseRepository;
@@ -40,15 +40,22 @@ class CourseLazyLoadingTest {
     @Autowired
     private EntityManager entityManager;
 
+    private Long courseId;  // Store the course ID for each test
+
     @BeforeEach
     void setUp() {
+        // Clear any existing data
+        studentRepository.deleteAll();
+        courseRepository.deleteAll();
+
         // Create a course
         Course course = Course.builder()
             .name("Java Programming")
             .code("CS101")
             .credits(3)
             .build();
-        courseRepository.save(course);
+        course = courseRepository.save(course);
+        courseId = course.getId();  // Store the actual generated ID
 
         // Create and enroll three students
         List<Student> students = Arrays.asList(
@@ -59,7 +66,8 @@ class CourseLazyLoadingTest {
         studentRepository.saveAll(students);
 
         // Enroll students in the course
-        students.forEach(student -> student.enrollInCourse(course));
+        Course finalCourse = course;
+        students.forEach(student -> student.enrollInCourse(finalCourse));
         studentRepository.saveAll(students);
 
         // Clear persistence context to ensure clean lazy loading tests
@@ -70,11 +78,8 @@ class CourseLazyLoadingTest {
     @Test
     @DisplayName("Should demonstrate lazy loading behavior when accessing students")
     void shouldDemonstrateLazyLoading() {
-        // First, get the course without loading students
-        Course course = courseRepository.findById(1L).orElseThrow();
-        // YIKES!!
-        // This ^^^ fails when running all the tests in a session.
-        // running just this tests works.
+        // Use the stored courseId instead of assuming ID 1
+        Course course = courseRepository.findById(courseId).orElseThrow();
 
         // Verify course is loaded but students are not
         assertTrue(Hibernate.isInitialized(course));
@@ -111,8 +116,8 @@ class CourseLazyLoadingTest {
     @Test
     @DisplayName("Should demonstrate LazyInitializationException when session is closed")
     void shouldThrowLazyInitializationException() {
-        // Get course reference
-        Course course = courseRepository.findById(1L).orElseThrow();
+        // Use the stored courseId
+        Course course = courseRepository.findById(courseId).orElseThrow();
 
         // Clear persistence context to simulate session closing
         entityManager.clear();
@@ -128,14 +133,8 @@ class CourseLazyLoadingTest {
     @DisplayName("Should demonstrate proper lazy loading in service layer")
     @Transactional(readOnly = true)
     void shouldHandleLazyLoadingInService() {
-        // Get course with students eagerly loaded
-        // IDK why it fails when I try and inline this.
-        // Course course = courseRepository.findByIdWithStudents(1L).orElseThrow();
-        // but one step at a time works ok.
-        // nope, that's not it.  This fails when running all the tests in a session.
-        // running just this tests works.
-        Optional<Course> opt = courseRepository.findByIdWithStudents(1L);
-        Course course = opt.orElseThrow();
+        // Use the stored courseId
+        Course course = courseRepository.findByIdWithStudents(courseId).orElseThrow();
 
         // Access students within transaction
         Set<Student> students = course.getStudents();
@@ -149,4 +148,3 @@ class CourseLazyLoadingTest {
             .containsAll(Arrays.asList("John Doe", "Jane Smith", "Bob Wilson")));
     }
 }
-
