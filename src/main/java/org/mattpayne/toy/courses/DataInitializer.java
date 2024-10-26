@@ -7,6 +7,7 @@ import org.mattpayne.toy.courses.course.CourseRepository;
 import org.mattpayne.toy.courses.student.Student;
 import org.mattpayne.toy.courses.student.StudentRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+// Should only run when the NotTesting profile is active
+@Profile("!test")
 public class DataInitializer implements CommandLineRunner {
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
