@@ -1,14 +1,7 @@
 package org.mattpayne.toy.courses.course;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.time.OffsetDateTime;
 import java.util.Set;
 import lombok.Getter;
@@ -49,7 +42,7 @@ public class Course {
     @Column(nullable = false)
     private Integer credits;
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "courses",fetch = FetchType.LAZY)
     private Set<Student> students;
 
     @CreatedDate
